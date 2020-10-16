@@ -23,13 +23,18 @@ A mathematical education application for first graders.
     source env/bin/activate
   ## Windows
     .\env\Scripts\activate
+    
+# Deactivating (same for all platforms)
+   -deactivate
 
 
 # Installing the requirements from requirements.txt
       -pip install -r requirements.txt
   
   
-# Installing other dependancies with pip install [package name]
+# Installing other dependancies
+      -ensure your virtual env is still activated and then: 
+      -pip install [package name]
 
 ## if you find yourself needing more packages to install with pipthey must be added to the requirements.txt file like so:
       -pip freeze > requirements.txt
