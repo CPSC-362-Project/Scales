@@ -1,4 +1,4 @@
-# Scales-1
+# Scales
 A mathematical education application for first graders.
 
 # Requirements
