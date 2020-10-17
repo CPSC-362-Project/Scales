@@ -25,16 +25,16 @@ A mathematical education application for first graders.
     .\env\Scripts\activate
     
 # Deactivating (same for all platforms)
-   -deactivate
+       deactivate
 
 
 # Installing the requirements from requirements.txt
-      -pip install -r requirements.txt
+      pip install -r requirements.txt
   
   
 # Installing other dependancies
       -ensure your virtual env is still activated and then: 
-      -pip install [package name]
+      pip install [package name]
 
 ## if you find yourself needing more packages to install with pipthey must be added to the requirements.txt file like so:
-      -pip freeze > requirements.txt
+      pip freeze > requirements.txt
