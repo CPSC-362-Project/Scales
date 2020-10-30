@@ -174,21 +174,25 @@ class ModuleSelectorWidget(QtWidgets.QWidget):
     def selectAdd(self):
         self.selection_pointer[0] = "+"
         self.parent.PlayWidget = PlayWidget("+", self.parent)
+        self.setWindowTitle("Scales - Play: Addition")
         self.parent.setCentralWidget(self.parent.PlayWidget)
         # Go back to MainWindow and start play with selection OR start play here
     def selectSub(self):
         self.selection_pointer[0] = "-"
         self.parent.PlayWidget = PlayWidget("-", self.parent)
+        self.setWindowTitle("Scales - Play: Subtraction")
         self.parent.setCentralWidget(self.parent.PlayWidget)
         # Go back to MainWindow and start play with selection OR start play here
     def selectMul(self):
         self.selection_pointer[0] = "*"
         self.parent.PlayWidget = PlayWidget("*", self.parent)
+        self.setWindowTitle("Scales - Play: Multiplication")
         self.parent.setCentralWidget(self.parent.PlayWidget)
         # Go back to MainWindow and start play with selection OR start play here
     def selectDiv(self):
         self.selection_pointer[0] = "/"
         self.parent.PlayWidget = PlayWidget("/", self.parent)
+        self.setWindowTitle("Scales - Play: Division")
         self.parent.setCentralWidget(self.parent.PlayWidget)
         # Go back to MainWindow and start play with selection OR start play here
     
@@ -211,11 +215,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def startPlayWidget(self):
         '''
         self.PlayWidget = PlayWidget("-", self) #Will take in the operator, temporarily as a string for support of existing code
-        
         '''
         self.selection_pointer = [""]
         self.PlayWidget = ModuleSelectorWidget(self.selection_pointer, self)
-        self.setWindowTitle("Scales - Play")
+        self.setWindowTitle("Scales - Play: Select")
         self.setCentralWidget(self.PlayWidget)
         self.show()
 
