@@ -38,6 +38,7 @@ class PlayWidget(QtWidgets.QWidget):
         self.QuestionLayout.addWidget(self.numRight)
         self.QuestionLayout.addWidget(self.eq)
         self.QuestionLayout.addWidget(self.sol)
+        self.QuestionLayout.setAlignment(QtCore.Qt.AlignCenter)
 
         #   input section
         self.TextInput = QtWidgets.QLineEdit()
