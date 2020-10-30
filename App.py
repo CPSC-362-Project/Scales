@@ -46,12 +46,32 @@ class PlayWidget(QtWidgets.QWidget):
         self.submitButton = QtWidgets.QPushButton("Submit")
         self.submitButton.setStyleSheet("background-color: green; color: white; padding: 15px 15px; font-size: 20px; border-radius: 10px;")
 
+        '''
         #   input layout
         self.inputLayout = QtWidgets.QHBoxLayout()
         self.inputLayout.addWidget(self.TextInput)
         self.inputLayout.addWidget(self.submitButton)
         self.submitButton.clicked.connect(self.operate)
+        '''
+        #   numpad input layout
+        self.inputLayout = QtWidgets.QGridLayout()
+        #self.inputLayout.setStyleSheet("background-color: #FFFFFF; opacity: 0.2; border-radius: 5px; border-color: black") #Style for numpad background
+        self.inputLayout.addWidget(self.TextInput, 0,0, 1,2)
+        self.inputLayout.addWidget(self.submitButton, 0,2)
+        self.submitButton.clicked.connect(self.operate)
 
+        self.numPadButtons = [
+            [QtWidgets.QPushButton('7'), QtWidgets.QPushButton('8'), QtWidgets.QPushButton('9')], 
+            [QtWidgets.QPushButton('4'), QtWidgets.QPushButton('5'), QtWidgets.QPushButton('6')], 
+            [QtWidgets.QPushButton('1'), QtWidgets.QPushButton('2'), QtWidgets.QPushButton('3')], 
+            [QtWidgets.QPushButton('-'), QtWidgets.QPushButton('0'), QtWidgets.QPushButton('DEL')]]
+
+        for i in range(0, 4):
+            for j in range(0, 3):
+                self.numPadButtons[i][j].setStyleSheet("background-color: #002993; color: #FFFFFF")
+                self.inputLayout.addWidget(self.numPadButtons[i][j], i+1, j)
+
+        self.inputLayout.setVerticalSpacing(20)
 
         #   layout all widgets
         self.stack = QtWidgets.QVBoxLayout()
