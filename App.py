@@ -1,6 +1,7 @@
 import sys
 import random
 from PySide2 import QtCore, QtWidgets, QtGui
+from functools import partial
         
 
 class PlayWidget(QtWidgets.QWidget):
@@ -60,11 +61,14 @@ class PlayWidget(QtWidgets.QWidget):
             [QtWidgets.QPushButton('7'), QtWidgets.QPushButton('8'), QtWidgets.QPushButton('9')], 
             [QtWidgets.QPushButton('4'), QtWidgets.QPushButton('5'), QtWidgets.QPushButton('6')], 
             [QtWidgets.QPushButton('1'), QtWidgets.QPushButton('2'), QtWidgets.QPushButton('3')], 
-            [QtWidgets.QPushButton('-'), QtWidgets.QPushButton('0'), QtWidgets.QPushButton('DEL')]]
-
+            [QtWidgets.QPushButton('+/-'), QtWidgets.QPushButton('0'), QtWidgets.QPushButton('DEL')]]
+        for i in range(0,4):
+            for j in range(0, 3):
+                self.numPadButtons[i][j].clicked.connect(partial(self.enterNumber, self.numPadButtons[i][j].text()))
+        
         for i in range(0, 4):
             for j in range(0, 3):
-                self.numPadButtons[i][j].setStyleSheet("background-color: #002993; color: #FFFFFF")
+                self.numPadButtons[i][j].setStyleSheet("background-color: #002993; color: #FFFFFF; padding: 20px 20px; font-size: 35px")
                 self.inputLayout.addWidget(self.numPadButtons[i][j], i+1, j)
 
         self.inputLayout.setVerticalSpacing(20)
@@ -75,6 +79,22 @@ class PlayWidget(QtWidgets.QWidget):
         self.stack.addLayout(self.inputLayout)
         self.setLayout(self.stack)
     
+    def enterNumber(self, txt):
+        if (txt == "+/-"):
+            #Change sign
+            temp_text = self.TextInput.text()
+            if (len(temp_text) > 0):
+                if( temp_text[0] == '-' ):
+                    self.TextInput.setText(temp_text[1:len(temp_text)])
+                else:
+                    self.TextInput.setText('-' + temp_text)
+        elif (txt == 'DEL'):
+            #Delete character
+            temp_text = self.TextInput.text()
+            self.TextInput.setText("" if (len(temp_text) == 0) else temp_text[0:-1])
+        else:
+            self.TextInput.setText(self.TextInput.text() + txt)
+        
     def shuffle(self):
 
         right = random.choice(self.random)
