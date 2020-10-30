@@ -1,18 +1,13 @@
 import sys
 import random
 from PySide2 import QtCore, QtWidgets, QtGui
-
-"""
-class ModuleSelectorWidget(QtWidgets.QWidget):
-    def __init__(self, parent=HomeWidget):
-        super(ModuleSelectorWidget, self).__init__(parent)
-        """
+        
 
 class PlayWidget(QtWidgets.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, operation_selection, parent=None):
         super(PlayWidget, self).__init__(parent)
 
-        self.operand = '-'
+        self.operand = operation_selection
         self.random = ['1','2','3','4','5','6','7','8','9','10']
 
         textStyle = ("color: white; font-size: 60px;")
@@ -149,6 +144,55 @@ class HomeWidget(QtWidgets.QWidget):
         self.setLayout(self.layout)
 
 
+class ModuleSelectorWidget(QtWidgets.QWidget):
+    def __init__(self, selection_pointer, parent=HomeWidget):
+        super(ModuleSelectorWidget, self).__init__(parent)
+        self.parent = parent
+        self.selection_pointer = selection_pointer
+        self.selectionGrid = QtWidgets.QGridLayout()
+        self.operation_selections = [[QtWidgets.QPushButton("+"), QtWidgets.QPushButton("-")],
+            [QtWidgets.QPushButton("*"), QtWidgets.QPushButton("/")]] #Replace with better icons
+        self.operation_selections[0][0].clicked.connect(self.selectAdd)
+        self.operation_selections[0][1].clicked.connect(self.selectSub)
+        self.operation_selections[1][0].clicked.connect(self.selectMul)
+        self.operation_selections[1][1].clicked.connect(self.selectDiv)
+
+        self.selectionGrid = QtWidgets.QGridLayout()
+        for i in range(0,2):
+            for j in range(0,2):
+                self.selectionGrid.addWidget(self.operation_selections[i][j], i, j)
+
+        self.stack = QtWidgets.QVBoxLayout()
+        #self.stack.addLayout(self.QuestionLayout)
+        #self.stack.addLayout(self.inputLayout)
+        self.stack.addLayout(self.selectionGrid)
+        self.setLayout(self.stack)
+    
+    # Multiple methods created with great redundancy due to difficulties with passing
+    # arguments to a passed function to Button. Adjust if method found.
+    # Also, string used to denote operation, change if necessary.
+    def selectAdd(self):
+        self.selection_pointer[0] = "+"
+        self.parent.PlayWidget = PlayWidget("+", self.parent)
+        self.parent.setCentralWidget(self.parent.PlayWidget)
+        # Go back to MainWindow and start play with selection OR start play here
+    def selectSub(self):
+        self.selection_pointer[0] = "-"
+        self.parent.PlayWidget = PlayWidget("-", self.parent)
+        self.parent.setCentralWidget(self.parent.PlayWidget)
+        # Go back to MainWindow and start play with selection OR start play here
+    def selectMul(self):
+        self.selection_pointer[0] = "*"
+        self.parent.PlayWidget = PlayWidget("*", self.parent)
+        self.parent.setCentralWidget(self.parent.PlayWidget)
+        # Go back to MainWindow and start play with selection OR start play here
+    def selectDiv(self):
+        self.selection_pointer[0] = "/"
+        self.parent.PlayWidget = PlayWidget("/", self.parent)
+        self.parent.setCentralWidget(self.parent.PlayWidget)
+        # Go back to MainWindow and start play with selection OR start play here
+    
+        
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
@@ -165,7 +209,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
     def startPlayWidget(self):
-        self.PlayWidget = PlayWidget(self)
+        '''
+        self.PlayWidget = PlayWidget("-", self) #Will take in the operator, temporarily as a string for support of existing code
+        
+        '''
+        self.selection_pointer = [""]
+        self.PlayWidget = ModuleSelectorWidget(self.selection_pointer, self)
         self.setWindowTitle("Scales - Play")
         self.setCentralWidget(self.PlayWidget)
         self.show()
