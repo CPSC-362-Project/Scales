@@ -119,14 +119,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def backAction(self):
         curr_class = str(type(self.centralWidget()))
-        print(curr_class)
-        if (curr_class == "<class '__main__.ModuleSelectorWidget'>" or False): #Replace False with the module selector for the learn module
-            self.startHomeWidget()
-        elif (curr_class == "<class 'PlayModule.PlayWidget'>"):
+        #print(curr_class) #For Debugging Purposes
+        if (curr_class == "<class 'PlayModule.PlayWidget'>"):
             self.startPlayWidget()
         elif (curr_class == "<class 'LearnModule.LearnWidget'>"):
             self.startLearnWidget()
-        else:
+        else: #Default to main menu
             self.startHomeWidget()
 
 

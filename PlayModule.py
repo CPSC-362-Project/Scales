@@ -69,6 +69,8 @@ class PlayWidget(QtWidgets.QWidget):
         self.stack.addLayout(self.QuestionLayout)
         self.stack.addLayout(self.inputLayout)
         self.setLayout(self.stack)
+
+        self.shuffle() #Shuffle here to make sure that the operands are valid using shuffle's error checking
     
     def enterNumber(self, txt):
         if (txt == "+/-"):
@@ -95,6 +97,10 @@ class PlayWidget(QtWidgets.QWidget):
                 temp = right
                 right = left
                 left = temp
+        elif self.operand == '/':
+            temp_res = int(left) / int(right)
+            if int(temp_res) != temp_res: #Not an integer result,
+                left = str(int(left)*int(right))
 
         self.numLeft.setText(left)
         self.numRight.setText(right)
@@ -115,10 +121,26 @@ class PlayWidget(QtWidgets.QWidget):
         if(wrong):
             self.showMessageBox("Incorrect, please try again.")
         else:
-            self.showMessageBox("Nice job! you got it!")
+            self.showMessageBox("Nice job! You got it!")
             self.TextInput.clear()
             self.shuffle()
             
 
     def showMessageBox(self, value):
-        QtWidgets.QMessageBox.information(self, "Scales", value)
+        #QtWidgets.QMessageBox.information(self, "Scales", value)
+
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setWindowTitle("Scales")
+        msgBox.setText(value)
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        if( len(value) >= 9 ):
+            if (value[0:9] == "Nice job!"):
+                QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: green; color: white")
+            elif (value[0:9] == "Incorrect"):
+                QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: red; color: white")
+            else:
+                QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: white; color: black")
+        else:
+            QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: white; color: black")
+            print("Invalid value passed, choose something which starts with 'Incorrect' or 'Nice Job!'")
+        msgBox.exec()
