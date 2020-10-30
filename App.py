@@ -38,6 +38,7 @@ class PlayWidget(QtWidgets.QWidget):
 
         #   input section
         self.TextInput = QtWidgets.QLineEdit()
+        self.TextInput.setAlignment(QtCore.Qt.AlignCenter)
         self.TextInput.setStyleSheet("color: white; padding: 30px 0px; font-size: 35px;")
         self.TextInput.returnPressed.connect(self.operate)
         self.submitButton = QtWidgets.QPushButton("Submit")
@@ -68,7 +69,7 @@ class PlayWidget(QtWidgets.QWidget):
         
         for i in range(0, 4):
             for j in range(0, 3):
-                self.numPadButtons[i][j].setStyleSheet("background-color: #002993; color: #FFFFFF; padding: 20px 20px; font-size: 35px")
+                self.numPadButtons[i][j].setStyleSheet("background-color: #002993; color: #FFFFFF; padding: 20px 20px; font-size: 35px; border-radius: 20px;")
                 self.inputLayout.addWidget(self.numPadButtons[i][j], i+1, j)
 
         self.inputLayout.setVerticalSpacing(20)
@@ -171,16 +172,22 @@ class ModuleSelectorWidget(QtWidgets.QWidget):
         self.selection_pointer = selection_pointer
         self.selectionGrid = QtWidgets.QGridLayout()
         self.operation_selections = [[QtWidgets.QPushButton("+"), QtWidgets.QPushButton("-")],
-            [QtWidgets.QPushButton("*"), QtWidgets.QPushButton("/")]] #Replace with better icons
-        self.operation_selections[0][0].clicked.connect(self.selectAdd)
-        self.operation_selections[0][1].clicked.connect(self.selectSub)
-        self.operation_selections[1][0].clicked.connect(self.selectMul)
-        self.operation_selections[1][1].clicked.connect(self.selectDiv)
+            [QtWidgets.QPushButton("*"), QtWidgets.QPushButton("/")]] 
+
+        option_colors = [['#d14590', '#c24a32'], ['#315dbd', '#c7a336']]
 
         self.selectionGrid = QtWidgets.QGridLayout()
         for i in range(0,2):
             for j in range(0,2):
-                self.selectionGrid.addWidget(self.operation_selections[i][j], i, j)
+                temp_button = self.operation_selections[i][j]
+                temp_button.setStyleSheet("background-color: " + option_colors[i][j] + "; color: #FFFFFF; margin: 10% 80%; font-size: 50px; border-radius: 15px")
+                temp_button.clicked.connect(partial(self.select, temp_button.text()))
+                self.selectionGrid.addWidget(temp_button, i, j)
+
+        self.operation_selections[0][0].setText("\n+\n\nAddition\n")
+        self.operation_selections[0][1].setText("\n-\n\nSubtraction\n")
+        self.operation_selections[1][0].setText("\n×\n\nMultiplication\n")
+        self.operation_selections[1][1].setText("\n÷\n\nDivision\n")
 
         self.stack = QtWidgets.QVBoxLayout()
         #self.stack.addLayout(self.QuestionLayout)
@@ -188,33 +195,19 @@ class ModuleSelectorWidget(QtWidgets.QWidget):
         self.stack.addLayout(self.selectionGrid)
         self.setLayout(self.stack)
     
-    # Multiple methods created with great redundancy due to difficulties with passing
-    # arguments to a passed function to Button. Adjust if method found.
-    # Also, string used to denote operation, change if necessary.
-    def selectAdd(self):
-        self.selection_pointer[0] = "+"
-        self.parent.PlayWidget = PlayWidget("+", self.parent)
-        self.setWindowTitle("Scales - Play: Addition")
+    def select(self, op_string):
+        self.parent.PlayWidget = PlayWidget(op_string, self.parent)
+        temp_str = ""
+        if(op_string == "+"):
+            temp_str = "Addition"
+        elif (op_string == "-"):
+            temp_str = "Subtraction"
+        elif (op_string == "*"):
+            temp_str = "Multiplication"
+        elif (op_string == "/"):
+            temp_str = "Division"
+        self.parent.setWindowTitle("Scales - Play: " + temp_str)
         self.parent.setCentralWidget(self.parent.PlayWidget)
-        # Go back to MainWindow and start play with selection OR start play here
-    def selectSub(self):
-        self.selection_pointer[0] = "-"
-        self.parent.PlayWidget = PlayWidget("-", self.parent)
-        self.setWindowTitle("Scales - Play: Subtraction")
-        self.parent.setCentralWidget(self.parent.PlayWidget)
-        # Go back to MainWindow and start play with selection OR start play here
-    def selectMul(self):
-        self.selection_pointer[0] = "*"
-        self.parent.PlayWidget = PlayWidget("*", self.parent)
-        self.setWindowTitle("Scales - Play: Multiplication")
-        self.parent.setCentralWidget(self.parent.PlayWidget)
-        # Go back to MainWindow and start play with selection OR start play here
-    def selectDiv(self):
-        self.selection_pointer[0] = "/"
-        self.parent.PlayWidget = PlayWidget("/", self.parent)
-        self.setWindowTitle("Scales - Play: Division")
-        self.parent.setCentralWidget(self.parent.PlayWidget)
-        # Go back to MainWindow and start play with selection OR start play here
     
         
 
@@ -222,6 +215,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setGeometry(50, 50, 400, 450)
+        self.ToolBar = self.addToolBar("Back")
+        back_action = QtWidgets.QAction("Back", self)
+        back_action.setStatusTip("Go back")
+        back_action.triggered.connect(partial(self.startHomeWidget))
+        self.ToolBar.addAction(back_action)
+        self.ToolBar.setMovable(False)
         #self.setFixedSize(400, 450)
         self.startHomeWidget()
 
@@ -233,14 +232,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
     def startPlayWidget(self):
-        '''
-        self.PlayWidget = PlayWidget("-", self) #Will take in the operator, temporarily as a string for support of existing code
-        '''
         self.selection_pointer = [""]
         self.PlayWidget = ModuleSelectorWidget(self.selection_pointer, self)
         self.setWindowTitle("Scales - Play: Select")
         self.setCentralWidget(self.PlayWidget)
         self.show()
+
+    
 
 
 if __name__ == "__main__":
