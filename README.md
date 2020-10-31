@@ -38,3 +38,6 @@ A mathematical education application for first graders.
 
 ## if you find yourself needing more packages to install with pipthey must be added to the requirements.txt file like so:
       pip freeze > requirements.txt
+      
+# Starting The Application
+      python3 App.py
