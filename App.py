@@ -91,6 +91,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.back_action.triggered.connect(partial(self.backAction))
         self.ToolBar.addAction(self.back_action)
         self.ToolBar.setMovable(False)
+        self.ToolBar.setStyleSheet("color: white;")
         #self.setFixedSize(400, 450)
         self.startHomeWidget()
 

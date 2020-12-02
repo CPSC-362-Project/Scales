@@ -289,7 +289,7 @@ def displayFunction(outputMode, outputString):
 
     if(outputMode == 'clear'):
         print('\n'*10)
-        Return: None
+        return None
 
 #Wrapper function for input text & messages. Note: this is a single location for replacing input
 #from the keyboard, with display output driven by PyQT, etc.

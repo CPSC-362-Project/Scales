@@ -8,139 +8,73 @@ class LearnWidget(QtWidgets.QWidget):
     def __init__(self, operation_selection, parent=None):
         super(LearnWidget, self).__init__(parent)
 
-        self.operand = operation_selection
-        self.random = ['1','2','3','4','5','6','7','8','9','10']
+        operand = operation_selection
+        self.learnMul = ["Welcome to Scales!", "Let's start with multiplying.", "We can use our fingers \n to multiply numbers.", "Lets multiply 2 and 3.", "Put up 3 fingers", "Now add 3 more fingers", "We have added 3 fingers \n two times!", "This is the same as\n multiplying two numbers!", "How many fingers\n do you have up?", "6! Did you get it right?", "Click back to \n pick another \n module."]
+        self.learnDiv = ["Welcome to Scales!", "Let's start with dividing.", "We can use our fingers to\n divide numbers.", "Lets divide 6 by 3.", "Put up 6 fingers.", "Take down fingers\n 3 at a time.", "How many fingers\n did you take away\n before you go to 0?", "That's the answer to 6/3!", "Did you answer 2?", "If so, you got it right!", "Click back to \n pick another \n module."]
+        self.learnSub = ["Welcome to Scales!", "Let's start with subtracting.", "We can use our fingers \n to subtract numbers.", "Lets subtract 5 from 2.", "Put up 5 fingers.", "Take down 2.", "How many fingers are left?", "3! Did you get it right?", "Click back to \n pick another \n module."]
+        self.learnTexts = ["Welcome to Scales!", "Let's start with adding.", "We can use our fingers\n to add numbers.", "Let's add 3 and 2.", "Lets put up 3 fingers.", "Now count 2 more.", "How many fingers are up?", "5! Did you get it right?", "Click back to \n pick another \n module."]
 
-        textStyle = ("color: white; font-size: 60px;")
-        solStyle = ("color: red; font-size: 65px;")
+        self.tutorial = []
+        if operand == "+":
+            self.tutorial = self.learnTexts
+        elif operand == "-":
+            self.tutorial = self.learnSub
+        elif operand == "*":
+            self.tutorial = self.learnMul
+        elif operand == "/":
+            self.tutorial = self.learnDiv
 
-        # question widget
-        self.numLeft = QtWidgets.QLabel(random.choice(self.random))
-        self.op = QtWidgets.QLabel(self.operand)
-        self.numRight = QtWidgets.QLabel(random.choice(self.random))
-        self.eq = QtWidgets.QLabel("=")
-        self.sol = QtWidgets.QLabel("?")
-
-        self.numLeft.setStyleSheet(textStyle)
-        self.op.setStyleSheet(textStyle)
-        self.numRight.setStyleSheet(textStyle)
-        self.eq.setStyleSheet(textStyle)
-        self.sol.setStyleSheet(solStyle)
-
-        # question layout
-        self.QuestionLayout = QtWidgets.QHBoxLayout()
-        self.QuestionLayout.addWidget(self.numLeft)
-        self.QuestionLayout.addWidget(self.op)
-        self.QuestionLayout.addWidget(self.numRight)
-        self.QuestionLayout.addWidget(self.eq)
-        self.QuestionLayout.addWidget(self.sol)
-        self.QuestionLayout.setAlignment(QtCore.Qt.AlignCenter)
-
-        #   input section
-        self.TextInput = QtWidgets.QLineEdit()
-        self.TextInput.setAlignment(QtCore.Qt.AlignCenter)
-        self.TextInput.setStyleSheet("color: white; padding: 30px 0px; font-size: 35px;")
-        self.TextInput.returnPressed.connect(self.operate)
-        self.submitButton = QtWidgets.QPushButton("Submit")
-        self.submitButton.setStyleSheet("background-color: green; color: white; padding: 15px 15px; font-size: 20px; border-radius: 10px;")
-
-        '''
-        #   input layout
-        self.inputLayout = QtWidgets.QHBoxLayout()
-        self.inputLayout.addWidget(self.TextInput)
-        self.inputLayout.addWidget(self.submitButton)
-        self.submitButton.clicked.connect(self.operate)
-        '''
-        #   numpad input layout
-        self.inputLayout = QtWidgets.QGridLayout()
-        #self.inputLayout.setStyleSheet("background-color: #FFFFFF; opacity: 0.2; border-radius: 5px; border-color: black") #Style for numpad background
-        self.inputLayout.addWidget(self.TextInput, 0,0, 1,2)
-        self.inputLayout.addWidget(self.submitButton, 0,2)
-        self.submitButton.clicked.connect(self.operate)
-
-        self.numPadButtons = [
-            [QtWidgets.QPushButton('7'), QtWidgets.QPushButton('8'), QtWidgets.QPushButton('9')], 
-            [QtWidgets.QPushButton('4'), QtWidgets.QPushButton('5'), QtWidgets.QPushButton('6')], 
-            [QtWidgets.QPushButton('1'), QtWidgets.QPushButton('2'), QtWidgets.QPushButton('3')], 
-            [QtWidgets.QPushButton('+/-'), QtWidgets.QPushButton('0'), QtWidgets.QPushButton('DEL')]]
-        for i in range(0,4):
-            for j in range(0, 3):
-                self.numPadButtons[i][j].clicked.connect(partial(self.enterNumber, self.numPadButtons[i][j].text()))
+        self.currentText = 0
         
-        for i in range(0, 4):
-            for j in range(0, 3):
-                self.numPadButtons[i][j].setStyleSheet("background-color: #002993; color: #FFFFFF; padding: 20px 20px; font-size: 35px; border-radius: 20px;")
-                self.inputLayout.addWidget(self.numPadButtons[i][j], i+1, j)
 
-        self.inputLayout.setVerticalSpacing(20)
+        # Snakey Image
+        self.snakeCartoon = QtWidgets.QLabel()
+        snakepng = QtGui.QPixmap('images/snake1.png')
+        snakeScaled = snakepng.scaled(450, 450, QtCore.Qt.KeepAspectRatio)
+        self.snakeCartoon.setPixmap(snakeScaled)
 
-        #   layout all widgets
-        self.stack = QtWidgets.QVBoxLayout()
-        self.stack.addLayout(self.QuestionLayout)
-        self.stack.addLayout(self.inputLayout)
-        self.setLayout(self.stack)
+        # Tutorial Text
+        self.tutorialText = QtWidgets.QLabel(self.tutorial[self.currentText])
+        self.tutorialText.setStyleSheet("color: white; font-size: 52px;")
+        self.tutorialText.adjustSize()
+        self.tutorialText.wordWrap()
+
+        # Tutorial Navigation Stuff
+        navStyle = ("color: white; font-size: 22px; margin: 0 15px")
+        self.nextButton = QtWidgets.QPushButton("Next")
+        self.backButton = QtWidgets.QPushButton("Back")
+        self.nextButton.setStyleSheet(navStyle)
+        self.backButton.setStyleSheet(navStyle)
+        self.nextButton.clicked.connect(self.next)
+        self.backButton.clicked.connect(self.back)
+
+        # horizontal Layout for side by side buttons
+        self.buttonLayout = QtWidgets.QHBoxLayout()
+        self.buttonLayout.addWidget(self.backButton)
+        self.buttonLayout.addWidget(self.nextButton)
+
+        # Veritcal Layout - right side of page
+        self.vertLayout = QtWidgets.QVBoxLayout()
+        self.vertLayout.addWidget(self.tutorialText)
+        self.vertLayout.addLayout(self.buttonLayout)
+
+        # Horizontal Layout
+        self.splitLayout = QtWidgets.QHBoxLayout()
+        self.splitLayout.addWidget(self.snakeCartoon)
+        self.splitLayout.addLayout(self.vertLayout)
+        self.splitLayout.setAlignment(QtCore.Qt.AlignCenter)
+
+
+        # Apply the layout
+        self.setLayout(self.splitLayout)
+
+    def next(self):
+        self.currentText += 1
+        self.tutorialText.setText(self.tutorial[self.currentText])
+        self.tutorialText.repaint()
     
-    def enterNumber(self, txt):
-        if (txt == "+/-"):
-            #Change sign
-            temp_text = self.TextInput.text()
-            if (len(temp_text) > 0):
-                if( temp_text[0] == '-' ):
-                    self.TextInput.setText(temp_text[1:len(temp_text)])
-                else:
-                    self.TextInput.setText('-' + temp_text)
-        elif (txt == 'DEL'):
-            #Delete character
-            temp_text = self.TextInput.text()
-            self.TextInput.setText("" if (len(temp_text) == 0) else temp_text[0:-1])
-        else:
-            self.TextInput.setText(self.TextInput.text() + txt)
-        
-    def shuffle(self):
+    def back(self):
+        self.currentText -= 1
+        self.tutorialText.setText(self.tutorial[self.currentText])
+        self.tutorialText.repaint()
 
-        right = random.choice(self.random)
-        left = random.choice(self.random)
-
-        if self.operand == '-':
-            if int(right) > int(left):
-                temp = right
-                right = left
-                left = temp
-
-        self.numLeft.setText(left)
-        self.numRight.setText(right)
-        self.numLeft.repaint()
-        self.numRight.repaint()
-    
-    def operate(self):
-        if(self.operand == "+"):
-            if ((int(self.numLeft.text()) + int(self.numRight.text())) != int(self.TextInput.text())):
-                self.showMessageBox("Incorrect, please try again.")
-            else:
-                self.showMessageBox("Nice job! you got it!")
-                self.TextInput.clear()
-                self.shuffle()
-        elif(self.operand == "-"):
-            if ((int(self.numLeft.text()) - int(self.numRight.text())) != int(self.TextInput.text())):
-                self.showMessageBox("Incorrect, please try again.")
-            else:
-                self.showMessageBox("Nice job! you got it!")
-                self.TextInput.clear()
-                self.shuffle()
-        elif(self.operand == "*"):
-            if ((int(self.numLeft.text()) * int(self.numRight.text())) != int(self.TextInput.text())):
-                self.showMessageBox("Incorrect, please try again.")
-            else:
-                self.showMessageBox("Nice job! you got it!")
-                self.TextInput.clear()
-                self.shuffle()
-        elif(self.operand == "/"):
-            if ((int(self.numLeft.text()) / int(self.numRight.text())) != int(self.TextInput.text())):
-                self.showMessageBox("Incorrect, please try again.")
-            else:
-                self.showMessageBox("Nice job! you got it!")
-                self.TextInput.clear()
-                self.shuffle()
-
-    def showMessageBox(self, value):
-        QtWidgets.QMessageBox.information(self, "Scales", value)
