@@ -1,6 +1,6 @@
 import sys
 import random
-from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2 import QtCore, QtWidgets, QtGui, QtMultimedia
 from functools import partial
 import LearnModule as Learn
 import PlayModule as Play
@@ -77,6 +77,7 @@ class ModuleSelectorWidget(QtWidgets.QWidget):
 
         else:
             print("Type must be \"Learn\" or \"Play\"")
+
     
         
 
@@ -109,6 +110,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Scales - Learn: Select")
         self.setCentralWidget(self.SelectWidget)
         self.ToolBar.setVisible(True)
+        sound = QtMultimedia.QSound("sounds/blip1.wav")
+        sound.play()
         self.show()
         
     def startPlayWidget(self):
@@ -116,9 +119,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Scales - Play: Select")
         self.setCentralWidget(self.SelectWidget)
         self.ToolBar.setVisible(True)
+        sound = QtMultimedia.QSound("sounds/blip1.wav")
+        sound.play()
         self.show()
 
     def backAction(self):
+        sound = QtMultimedia.QSound("sounds/blip1.wav")
+        sound.play()
         curr_class = str(type(self.centralWidget()))
         #print(curr_class) #For Debugging Purposes
         if (curr_class == "<class 'PlayModule.PlayWidget'>"):

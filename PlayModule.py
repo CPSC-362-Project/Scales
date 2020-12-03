@@ -1,12 +1,15 @@
 import sys
 import random
-from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2 import QtCore, QtWidgets, QtGui, QtMultimedia
 from functools import partial
 
 
 class PlayWidget(QtWidgets.QWidget):
     def __init__(self, operation_selection, parent=None):
         super(PlayWidget, self).__init__(parent)
+
+        sound = QtMultimedia.QSound("sounds/blip2.wav")
+        sound.play()
 
         self.operand = operation_selection
         self.random = ['1','2','3','4','5','6','7','8','9','10']
@@ -119,8 +122,12 @@ class PlayWidget(QtWidgets.QWidget):
             wrong = (int(int(self.numLeft.text()) / int(self.numRight.text()))) != int(self.TextInput.text())
 
         if(wrong):
+            sound = QtMultimedia.QSound("sounds/wrong.wav")
+            sound.play()
             self.showMessageBox("Incorrect, please try again.")
         else:
+            sound = QtMultimedia.QSound("sounds/correct.wav")
+            sound.play()
             self.showMessageBox("Nice job! You got it!")
             self.TextInput.clear()
             self.shuffle()
