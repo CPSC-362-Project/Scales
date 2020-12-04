@@ -69,12 +69,14 @@ class LearnWidget(QtWidgets.QWidget):
         self.setLayout(self.splitLayout)
 
     def next(self):
-        self.currentText += 1
-        self.tutorialText.setText(self.tutorial[self.currentText])
-        self.tutorialText.repaint()
+        if self.currentText + 1 < len(self.tutorial):
+            self.currentText += 1
+            self.tutorialText.setText(self.tutorial[self.currentText])
+            self.tutorialText.repaint()
     
     def back(self):
-        self.currentText -= 1
-        self.tutorialText.setText(self.tutorial[self.currentText])
-        self.tutorialText.repaint()
+        if self.currentText > 0:
+            self.currentText -= 1
+            self.tutorialText.setText(self.tutorial[self.currentText])
+            self.tutorialText.repaint()
 

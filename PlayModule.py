@@ -112,15 +112,21 @@ class PlayWidget(QtWidgets.QWidget):
     
     def operate(self):
         wrong = False
-        if(self.operand == "+"):
-            wrong = (int(self.numLeft.text()) + int(self.numRight.text())) != int(self.TextInput.text())
-        elif(self.operand == "-"):
-            wrong = (int(self.numLeft.text()) - int(self.numRight.text())) != int(self.TextInput.text())
-        elif(self.operand == "*"):
-            wrong = (int(self.numLeft.text()) * int(self.numRight.text())) != int(self.TextInput.text())
-        elif(self.operand == "/"):
-            wrong = (int(int(self.numLeft.text()) / int(self.numRight.text()))) != int(self.TextInput.text())
-
+        try:
+            if(self.operand == "+"):
+                wrong = (int(self.numLeft.text()) + int(self.numRight.text())) != int(self.TextInput.text())
+            elif(self.operand == "-"):
+                wrong = (int(self.numLeft.text()) - int(self.numRight.text())) != int(self.TextInput.text())
+            elif(self.operand == "*"):
+                wrong = (int(self.numLeft.text()) * int(self.numRight.text())) != int(self.TextInput.text())
+            elif(self.operand == "/"):
+                wrong = (int(int(self.numLeft.text()) / int(self.numRight.text()))) != int(self.TextInput.text())
+        except ValueError:
+            sound = QtMultimedia.QSound("sounds/wrong.wav")
+            sound.play()
+            self.showMessageBox("Invalid input. Please use numerical characters to input integers.")
+            return;
+        
         if(wrong):
             sound = QtMultimedia.QSound("sounds/wrong.wav")
             sound.play()
@@ -131,6 +137,7 @@ class PlayWidget(QtWidgets.QWidget):
             self.showMessageBox("Nice job! You got it!")
             self.TextInput.clear()
             self.shuffle()
+            
             
 
     def showMessageBox(self, value):
@@ -143,7 +150,7 @@ class PlayWidget(QtWidgets.QWidget):
         if( len(value) >= 9 ):
             if (value[0:9] == "Nice job!"):
                 QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: green; color: white")
-            elif (value[0:9] == "Incorrect"):
+            elif (value[0:9] == "Incorrect" or value[0:7] == "Invalid"):
                 QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: red; color: white")
             else:
                 QtWidgets.QMessageBox.setStyleSheet(msgBox, "background-color: white; color: black")
