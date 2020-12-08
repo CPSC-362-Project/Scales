@@ -40,4 +40,7 @@ A mathematical education application for first graders.
       pip freeze > requirements.txt
       
 # Starting The Application
+   ## If you have multiple versions of python...
       python3 App.py
+   ## Only one version of python
+      python App.py
