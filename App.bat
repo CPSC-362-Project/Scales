@@ -1,2 +1,1 @@
-python App.py
-pause
+START /MIN _app_wrapper.bat
