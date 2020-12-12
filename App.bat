@@ -1,1 +1,0 @@
-START /MIN _app_wrapper.bat
