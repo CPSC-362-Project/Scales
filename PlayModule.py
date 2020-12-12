@@ -125,7 +125,7 @@ class PlayWidget(QtWidgets.QWidget):
             sound = QtMultimedia.QSound("sounds/wrong.wav")
             sound.play()
             self.showMessageBox("Invalid input. Please use numerical characters to input integers.")
-            return;
+            return
         
         if(wrong):
             sound = QtMultimedia.QSound("sounds/wrong.wav")
